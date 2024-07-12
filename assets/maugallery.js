@@ -136,20 +136,22 @@
           }
         });
       }
-      let index = 0,
-        next = null;
+      let index = 0;
+      let next = null;
 
       $(imagesCollection).each(function (i) {
         if ($(activeImage).attr("src") === $(this).attr("src")) {
           index = i - 1;
+          if (index < 0) {
+            index = imagesCollection.length - 1; // Si l'index est négatif, il passe à la fin de la collection
+          }
           console.log(index);
         }
       });
-      prev =
-        imagesCollection[index] ||
-        imagesCollection[imagesCollection.length - 1];
-      $(".lightboxImage").attr("src", $(prev).attr("src"));
-      console.log(prev);
+
+      next = imagesCollection[index];
+      $(".lightboxImage").attr("src", $(next).attr("src"));
+      console.log(next);
     },
     nextImage() {
       let activeImage = null;
@@ -178,11 +180,11 @@
 
       $(imagesCollection).each(function (i) {
         if ($(activeImage).attr("src") === $(this).attr("src")) {
-          index = i + 1;
+          index = (i + 1) % imagesCollection.length;
           console.log(index);
         }
       });
-      index = index % imagesCollection.length;
+
       next = imagesCollection[index];
       $(".lightboxImage").attr("src", $(next).attr("src"));
       console.log(next);
@@ -235,7 +237,7 @@
       $(this).addClass("active-tag");
 
       var tag = $(this).data("images-toggle");
-   
+
       // Ajoute la classe "active" au bouton correspondant au tag
       if (tag === "all") {
         $(".nav-link[data-images-toggle='all']").addClass("active");
